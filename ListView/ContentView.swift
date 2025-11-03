@@ -46,7 +46,7 @@ struct FirstView: View {
             ForEach(tasksArray) { task in
                 Text(task.taskItem)
                 }
-            
+            .onDelete(perform: delete)
             .onMove { from, to in
                 // リストを並べ替えたときに実行する処理
                 replaceRow(from, to)
@@ -63,6 +63,11 @@ struct FirstView: View {
         .padding()
 
     }
+    func delete(at offsets: IndexSet) {
+            tasksArray.remove(atOffsets: offsets)
+        }
+    
+    
     
     func replaceRow(_ from: IndexSet, _ to: Int) {
         tasksArray.move(fromOffsets: from, toOffset: to)
