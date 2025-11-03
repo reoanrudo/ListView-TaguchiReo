@@ -42,33 +42,24 @@ struct FirstView: View {
             }
             
             // タスクリストを表示
-        List {
-            ForEach(tasksArray) { task in
-                Text(task.taskItem)
+            List {
+                ForEach(tasksArray) { task in
+                    Text(task.taskItem)
                 }
-            .onDelete(perform: delete)
-            .onMove { from, to in
-                // リストを並べ替えたときに実行する処理
-                replaceRow(from, to)
+                .onDelete(perform: { indexSet in
+                    self.tasksArray.remove(atOffsets: indexSet)
+                })
+                .onMove { from, to in
+                    replaceRow(from, to)
+                }
             }
-            
-            }
-            // ナビゲーションバーに編集ボタンを追加
-        .toolbar(content: {
-            EditButton()
-        })
-            
-            .navigationTitle("Task List")
+                .navigationTitle("Task List")
+                .toolbar {
+                    EditButton()
+                }
+                .padding()
         }
-        .padding()
-
     }
-    func delete(at offsets: IndexSet) {
-            tasksArray.remove(atOffsets: offsets)
-        }
-    
-    
-    
     func replaceRow(_ from: IndexSet, _ to: Int) {
         tasksArray.move(fromOffsets: from, toOffset: to)
         if let encodedArray = try? JSONEncoder().encode(tasksArray){
@@ -82,7 +73,7 @@ struct SecondView: View {
     @Environment(\.dismiss) private var dismiss  // 前の画面に戻る機能
     @State private var task: String = ""  // 入力されたテキストを保存
     @Binding var tasksArray: [Task]  // タスクの配列
-
+    
     var body: some View {
         // タスク入力フィールド
         TextField("Enter your task", text: $task)
