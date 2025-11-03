@@ -53,21 +53,22 @@ struct FirstView: View {
                     replaceRow(from, to)
                 }
             }
-                .navigationTitle("Task List")
-                .toolbar {
-                    EditButton()
-                }
-                .padding()
+            
+            .toolbar(content: {
+                EditButton()
+            })
+            
+            .navigationTitle("Task List")
         }
+        .padding()
     }
-    func replaceRow(_ from: IndexSet, _ to: Int) {
-        tasksArray.move(fromOffsets: from, toOffset: to)
-        if let encodedArray = try? JSONEncoder().encode(tasksArray){
-            tasksData = encodedArray
-        }
+func replaceRow(_ from: IndexSet, _ to: Int) {
+    tasksArray.move(fromOffsets: from, toOffset: to)
+    if let encodedArray = try? JSONEncoder().encode(tasksArray){
+        tasksData = encodedArray
     }
 }
-
+}
 // タスク追加画面
 struct SecondView: View {
     @Environment(\.dismiss) private var dismiss  // 前の画面に戻る機能
