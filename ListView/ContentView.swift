@@ -33,7 +33,7 @@ struct FirstView: View {
         NavigationStack {
             // タスク追加画面へのリンクボタン
             NavigationLink {
-                SecondView(tasksArray: $tasksArray).navigationTitle(Text("Add Task"))
+                SecondView(tasksArray: $tasksArray)
                     .navigationTitle(Text("Add Task"))
             } label: {
                 Text("Add New Task")
@@ -48,6 +48,9 @@ struct FirstView: View {
                 }
                 .onDelete(perform: { indexSet in
                     self.tasksArray.remove(atOffsets: indexSet)
+                    if let encodedArray = try? JSONEncoder().encode(tasksArray){
+                        tasksData = encodedArray
+                    }
                 })
                 .onMove { from, to in
                     replaceRow(from, to)
